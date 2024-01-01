@@ -12,24 +12,13 @@ int main(void)
 
 	while (1)
 	{
-		display_prompt();
+		write(STDOUT_FILENO, "Cash $ ", 7);
 		buffer = take_command();
 		execute_command(buffer);
 		free(buffer);
 	}
 
 	return (0);
-}
-
-/**
- * display_prompt - displays a prompt
- * Prototype: void display_prompt(void);
- * Return: void
- */
-
-void display_prompt(void)
-{
-	write(STDOUT_FILENO, "Cash $ ", 7);
 }
 
 /**

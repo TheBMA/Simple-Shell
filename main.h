@@ -13,7 +13,6 @@
 #include <fcntl.h>
 
 /*more function prototypes coming soon..*/
-void display_prompt(void);
 char *take_command(void);
 void execute_command(char *command);
 
