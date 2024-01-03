@@ -2,19 +2,23 @@
 
 /**
  * main - simple shell
- *
+ * @argc: arguments count
+ * @argv: arguments vector
  * Return: 0
  */
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	char *buffer;
 
+	/*unused parameter*/
+	(void)argc;
+
 	while (1)
 	{
-		write(STDOUT_FILENO, "Cash $ ", 7);
+		putstr("Cash $ ");
 		buffer = take_command();
-		execute_command(buffer);
+		execute_command(buffer, argv[0]);
 		free(buffer);
 	}
 
@@ -22,9 +26,25 @@ int main(void)
 }
 
 /**
+ * putstr - prints a string to standard output
+ * (basically a _putchar for strings)
+ * Prototype: void putstr(char *str);
+ * @str: the string to print
+ * Return: void
+ */
+
+void putstr(char *str)
+{
+	int i;
+
+	for (i = 0; str[i] != '\0'; i++)
+		write(STDOUT_FILENO, &str[i], 1);
+}
+
+
+/**
  * take_command - takes a command line from standard input using getline
  * Prototype: char *take_command(void);
- * (which is better? getline or read?)
  * Return: the command line.
  */
 
@@ -40,7 +60,7 @@ char *take_command(void)
 	if (read == -1)
 	{
 		write(STDERR_FILENO, "Can't read command", 18);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	return (command);
@@ -48,30 +68,40 @@ char *take_command(void)
 
 /**
  * execute_command - executes a command.
- * Prototype: void execute_command(char *command);
+ * Prototype: void execute_command(char *command, char *shellname);
  * @command: a string of characters (command + arguments)
- * (currently doesn't do anything)
+ * @shellname: the name chosen at compilation.
+ * (currently takes the exit command)
  * Return: void
  */
 
-void execute_command(char *command)
+void execute_command(char *command, char *shellname)
 {
-	size_t len = 0, i = 0;
+	char *token;
 
 	if (command == NULL)
-		write(STDOUT_FILENO, "\n", 1);
+	{
+		putstr("\n");
+		write(STDERR_FILENO, "Command is NULL", 15);
+		exit(EXIT_FAILURE);
+	}
+
 	else if (*command == '\n')
 		;
 	else
 	{
-		while (command[i] != '\0')
+		token = strtok(command, " \n");
+
+		/* if strcmp is allowed */
+		if (strcmp(token, "exit") == 0)
 		{
-			len++;
-			i++;
+			free(command);
+			exit(EXIT_SUCCESS);
 		}
 
-		write(STDOUT_FILENO, "Cash $: ", 8);
-		write(STDOUT_FILENO, command, len - 1);
-		write(STDOUT_FILENO, " command not found\n", 19);
+		/*else handle if token is PATH or not*/
+
+		putstr(shellname);
+		putstr(": No such file or directory\n");
 	}
 }

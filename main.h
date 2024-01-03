@@ -13,7 +13,8 @@
 #include <fcntl.h>
 
 /*more function prototypes coming soon..*/
+void putstr(char *str);
 char *take_command(void);
-void execute_command(char *command);
+void execute_command(char *command, char *shellname);
 
 #endif
