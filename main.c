@@ -78,6 +78,10 @@ char *take_command(void)
 void execute_command(char *command, char *shellname)
 {
 	char *token;
+	/*argv: the command-line arguments of the new program (child process)*/
+	char *argv[2];
+	pid_t pid, wait_child;
+	int executable;
 
 	if (command == NULL)
 	{
@@ -88,6 +92,7 @@ void execute_command(char *command, char *shellname)
 
 	else if (*command == '\n')
 		;
+
 	else
 	{
 		token = strtok(command, " \n");
@@ -99,9 +104,44 @@ void execute_command(char *command, char *shellname)
 			exit(EXIT_SUCCESS);
 		}
 
-		/*else handle if token is PATH or not*/
+		pid = fork();
 
-		putstr(shellname);
-		putstr(": No such file or directory\n");
+		/*It returns -1 if it fails*/
+		if (pid == -1)
+		{
+			free(command);
+			write(STDERR_FILENO, "fork failed", 11);
+			exit(EXIT_FAILURE);
+		}
+
+		/*In the child process fork returns 0*/
+		if (pid == 0)
+		{
+			argv[0] = token;
+			argv[1] = NULL;
+			executable = execve(token, argv, NULL);
+
+			if (executable == -1)
+			{
+				putstr(shellname);
+				putstr(": No such file or directory\n");
+			}
+
+			free(command);
+			exit(EXIT_SUCCESS);
+		}
+
+		/*In the parent process fork returns the pid*/
+		else
+		{
+			wait_child = wait(NULL);
+
+			if (wait_child == -1)
+			{
+				free(command);
+				write(STDERR_FILENO, "wait failed", 11);
+				exit(EXIT_FAILURE);
+			}
+		}
 	}
 }
