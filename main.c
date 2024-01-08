@@ -59,7 +59,7 @@ char *take_command(void)
 
 	if (read == -1)
 	{
-		write(STDERR_FILENO, "Can't read command", 18);
+		perror("Can't read command");
 		exit(EXIT_FAILURE);
 	}
 
@@ -77,16 +77,13 @@ char *take_command(void)
 
 void execute_command(char *command, char *shellname)
 {
-	char *token;
-	/*argv: the command-line arguments of the new program (child process)*/
-	char *argv[2];
+	char *token_list[20];
 	pid_t pid, wait_child;
-	int executable;
+	int executable, i;
 
 	if (command == NULL)
 	{
-		putstr("\n");
-		write(STDERR_FILENO, "Command is NULL", 15);
+		perror("Command is NULL");
 		exit(EXIT_FAILURE);
 	}
 
@@ -95,10 +92,10 @@ void execute_command(char *command, char *shellname)
 
 	else
 	{
-		token = strtok(command, " \n");
+		token_list[0] = strtok(command, " \n");
 
 		/* if strcmp is allowed */
-		if (strcmp(token, "exit") == 0)
+		if (strcmp(token_list[0], "exit") == 0)
 		{
 			free(command);
 			exit(EXIT_SUCCESS);
@@ -110,16 +107,19 @@ void execute_command(char *command, char *shellname)
 		if (pid == -1)
 		{
 			free(command);
-			write(STDERR_FILENO, "fork failed", 11);
+			perror("fork failed");
 			exit(EXIT_FAILURE);
 		}
 
 		/*In the child process fork returns 0*/
 		if (pid == 0)
 		{
-			argv[0] = token;
-			argv[1] = NULL;
-			executable = execve(token, argv, NULL);
+			for (i = 1; token_list[i - 1] != NULL; i++)
+			{
+				token_list[i] = strtok(NULL, " \n");
+			}
+			
+			executable = execve(token_list[0], token_list, NULL);
 
 			if (executable == -1)
 			{
@@ -139,7 +139,7 @@ void execute_command(char *command, char *shellname)
 			if (wait_child == -1)
 			{
 				free(command);
-				write(STDERR_FILENO, "wait failed", 11);
+				perror("wait failed");
 				exit(EXIT_FAILURE);
 			}
 		}
