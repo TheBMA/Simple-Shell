@@ -1,8 +1,8 @@
-#include "main.h"
+i#include "main.h"
 
 /**
- * full_path - provides directories which hold the command (full path)
- * @command: the file to look for
+ * get_path - generates directories which hold the command (full path)
+ * @command: the executable file to find
  * Return: pointer to the path of the file
 */
 char *get_path(char *command)

@@ -19,7 +19,7 @@ char *take_command(void);
 void execute_command(char *command, char *shellname);
 char *get_path(char *command);
 
-/*string functions*/
+/*string functions to be used*/
 int _strlen(char *str);
 char *_strdup(char *str);
 char *_strcat(char *dest, char *src);
