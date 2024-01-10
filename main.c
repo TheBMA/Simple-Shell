@@ -54,7 +54,6 @@ char *take_command(void)
 	size_t len = 0;
 	ssize_t read;
 
-	/*getline doesn't take STDIN_FILENO or 0 as input*/
 	read = getline(&command, &len, stdin);
 
 	if (read == -1)
@@ -65,4 +64,3 @@ char *take_command(void)
 
 	return (command);
 }
-

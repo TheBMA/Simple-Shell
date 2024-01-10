@@ -5,7 +5,6 @@
  * Prototype: void execute_command(char *command, char *shellname);
  * @command: a string of characters (command + arguments)
  * @shellname: the name chosen at compilation.
- * (currently takes the exit command)
  * Return: void
  */
 void execute_command(char *command, char *shellname)
@@ -19,71 +18,71 @@ void execute_command(char *command, char *shellname)
 		perror("Command is NULL");
 		exit(EXIT_FAILURE);
 	}
-	else if (*command == '\n')
-	{
-		/* Handle the case when command is newline */
-	}
 	else
 	{
 		token_list[0] = strtok(command, " \n");
-		if (_strcmp(token_list[0], "exit") == 0)
-		{
-			free(command);
-			exit(EXIT_SUCCESS);
-		}
 
-		pid = fork();
-
-		/* It returns -1 if it fails */
-		if (pid == -1)
+		if (token_list[0] != NULL)
 		{
-			free(command);
-			perror("fork failed");
-			exit(EXIT_FAILURE);
-		}
-
-		/* In the child process, fork returns 0 */
-		if (pid == 0)
-		{
-			for (i = 1; token_list[i - 1] != NULL; i++)
+			if (_strcmp(token_list[0], "exit") == 0)
 			{
-				token_list[i] = strtok(NULL, " \n");
+				free(command);
+				exit(EXIT_SUCCESS);
 			}
 
-			/* Generate the path to the first command(file name)before execution */
-			path = get_path(token_list[0]);
+			pid = fork();
 
-			/* Handle the case when path is NULL (executable not found) */
-			if (path == NULL)
+			/* It returns -1 if it fails */
+			if (pid == -1)
 			{
-				perror(shellname);
 				free(command);
+				perror("fork failed");
 				exit(EXIT_FAILURE);
 			}
 
-			executable = execve(path, token_list, NULL);
-
-			if (executable == -1)
+			/* In the child process, fork returns 0 */
+			if (pid == 0)
 			{
-				perror(shellname);
+				for (i = 1; token_list[i - 1] != NULL; i++)
+				{
+					token_list[i] = strtok(NULL, " \n");
+				}
+
+				/* Generate the path to the first command(file name)before execution */
+				path = get_path(token_list[0]);
+
+				/* Handle the case when path is NULL (executable not found) */
+				if (path == NULL)
+				{
+					perror(shellname);
+					free(command);
+					exit(EXIT_FAILURE);
+				}
+
+				executable = execve(path, token_list, NULL);
+
+				if (executable == -1)
+				{
+					perror(shellname);
+					free(command);
+					exit(EXIT_FAILURE);
+				}
+
 				free(command);
-				exit(EXIT_FAILURE);
+				exit(EXIT_SUCCESS);
 			}
 
-			free(command);
-			exit(EXIT_SUCCESS);
-		}
-
-		/* In the parent process, fork returns the pid */
-		else
-		{
-			wait_child = wait(NULL);
-
-			if (wait_child == -1)
+			/* In the parent process, fork returns the pid */
+			else
 			{
-				free(command);
-				perror("wait failed");
-				exit(EXIT_FAILURE);
+				wait_child = wait(NULL);
+
+				if (wait_child == -1)
+				{
+					free(command);
+					perror("wait failed");
+					exit(EXIT_FAILURE);
+				}
 			}
 		}
 	}
