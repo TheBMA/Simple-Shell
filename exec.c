@@ -17,7 +17,7 @@ void execute_command(char *command, char *shellname)
 	if (command == NULL)
 	{
 		perror("Command is NULL");
-        	exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	else if (*command == '\n')
 	{
@@ -25,9 +25,9 @@ void execute_command(char *command, char *shellname)
 	}
 	else
 	{
-		token_list[0] = strtok(command, " \n");	
+		token_list[0] = strtok(command, " \n");
 		if (_strcmp(token_list[0], "exit") == 0)
-	       	{
+		{
 			free(command);
 			exit(EXIT_SUCCESS);
 		}
@@ -59,17 +59,17 @@ void execute_command(char *command, char *shellname)
 				perror(shellname);
 				free(command);
 				exit(EXIT_FAILURE);
-			}	
+			}
 
 			executable = execve(path, token_list, NULL);
 
 			if (executable == -1)
 			{
- 				perror(shellname);
+				perror(shellname);
 			}
 
 			free(command);
- 			exit(EXIT_SUCCESS);
+			exit(EXIT_SUCCESS);
 		}
 
 		/* In the parent process, fork returns the pid */

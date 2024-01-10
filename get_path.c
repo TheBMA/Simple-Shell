@@ -7,9 +7,8 @@
 */
 char *get_path(char *command)
 {
-	/***environ is defined externally and used to access the environment variables*/
-    extern char **environ;
-	char path[BUFFER_SIZE], *ptr_path, **env_var = environ, *path_cpy, *path_token;
+	char path[BUFFER_SIZE], *ptr_path, **env_var = environ;
+	char *path_cpy, *path_token;
 	int i = 0;
 
 	/**Checks the accessibiliy to the file and if it is*/
@@ -19,13 +18,16 @@ char *get_path(char *command)
 	{
 		if (_strcmp(env_var[i], "PATH=") == 0)
 		{
-			/** extract the content of the environ skipping the 1st 5 caharcters PATH= **/
+			/*extract the content of the environ skipping the 1st 5 caharcters PATH=*/
 			path_cpy = _strdup(env_var[i] + 5);
 			path_token = strtok(path_cpy, ":");
 
 			while (path_token)
 			{
-				 /* to build the path for the command, we copy the directory path and concatenate the command to it */
+				 /**
+				  * to build the path for the command,
+				  * we copy the directory path and concatenate the command to it
+				 **/
 				ptr_path = _strcpy(path, path_token);
 				ptr_path = _strcat(path, "/");
 				ptr_path = _strdup(_strcat(path, command));

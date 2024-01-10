@@ -13,6 +13,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+/*environ is defined externally, used to access the environment variables*/
+extern char **environ;
+
 /*more function prototypes coming soon..*/
 void putstr(char *str);
 char *take_command(void);
