@@ -25,7 +25,7 @@ void execute_command(char *command, char *shellname)
 	}
 	else
 	{
-		token_list[0] = strtok(command, " \n")	
+		token_list[0] = strtok(command, " \n");	
 		if (_strcmp(token_list[0], "exit") == 0)
 	       	{
 			free(command);
@@ -35,10 +35,11 @@ void execute_command(char *command, char *shellname)
 		pid = fork();
 
 		/* It returns -1 if it fails */
-		if (pid == -1) {
-		free(command);
-		perror("fork failed");
-		exit(EXIT_FAILURE);
+		if (pid == -1)
+		{
+			free(command);
+			perror("fork failed");
+			exit(EXIT_FAILURE);
 		}
 
 		/* In the child process, fork returns 0 */
