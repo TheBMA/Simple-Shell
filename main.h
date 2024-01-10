@@ -22,7 +22,7 @@ char *get_path(char *command);
 /*string functions to be used*/
 int _strlen(char *str);
 char *_strdup(char *str);
-char *_strcat(char *dest, char *src);
-char *_strcpy(char *dest, char *src);
+char *_strcat(char *des, char *src);
+char *_strcpy(char *des, char *src);
 int _strcmp(const char *s1, const char *s2);
 #endif
