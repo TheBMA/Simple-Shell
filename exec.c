@@ -42,13 +42,12 @@ void execute_command(char *command, char *shellname) {
                 token_list[i] = strtok(NULL, " \n");
             }
 
-            /* Generate the path to the first command: file name before execution */
+            /* Generate the path to the first command(file name)before execution */
             path = get_path(token_list[0]);
 
+            /* Handle the case when path is NULL (executable not found) */
             if (path == NULL) {
-                /* Handle the case when path is NULL (executable not found) */
-                putstr(shellname);
-                putstr(": Command not found\n");
+                perror(shellname);
                 free(command);
                 exit(EXIT_FAILURE);
             }

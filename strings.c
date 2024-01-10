@@ -27,29 +27,29 @@ int _strcmp(const char *s1, const char *s2)
 }
 /**
  * _strcat - concat a string to another
- * @dest: The destination string
+ * @des: The destination string
  * @src: The source string
  * Return: On success, the resulting string
  */
-char *_strcat(char *dest, char *src)
+char *_strcat(char *des, char *src)
 {
 	int i = 0;
 
-	while (*dest != '\0')
+	while (*des != '\0')
 	{
-		dest++;
+		des++;
 		i++;
 	}
 	while (*src != '\0')
 	{
-		*dest = *src;
-		dest++;
+		*des = *src;
+		des++;
 		i++;
 		src++;
 	}
-	*dest = '\0';
-	dest -= i;
-	return (dest);
+	*des = '\0';
+	des -= i;
+	return (des);
 }
 /**
  * _strcpy - copies a string to another
@@ -57,15 +57,15 @@ char *_strcat(char *dest, char *src)
  * @dest: The destination string
  * Return: On success, the destination string
 */
-char *_strcpy(char *dest, char *src)
+char *_strcpy(char *des, char *src)
 {
 	int l = 0, i;
 
 	while (src[l] != '\0')
 		l++;
 	for (i = 0; i <= l; i++)
-		dest[i] = src[i];
-	return (dest);
+		des[i] = src[i];
+	return (des);
 }
 /**
  * _strlen - determines the length of a string
