@@ -59,7 +59,7 @@ char *take_command(void)
 
 	if (read == -1)
 	{
-		perror("Can't read command");
+		/*perror("Can't read command");*/
 		exit(EXIT_FAILURE);
 	}
 

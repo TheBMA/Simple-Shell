@@ -66,6 +66,8 @@ void execute_command(char *command, char *shellname)
 			if (executable == -1)
 			{
 				perror(shellname);
+				free(command);
+				exit(EXIT_FAILURE);
 			}
 
 			free(command);
