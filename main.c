@@ -10,7 +10,6 @@
 int main(int argc, char *argv[])
 {
 	char *buffer;
-	char *prompt = "$";
 
 
 	/*unused parameter*/
@@ -18,7 +17,7 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-		putstr(prompt);
+		putstr("$");
 		buffer = take_command();
 		execute_command(buffer, argv[0]);
 		free(buffer);
