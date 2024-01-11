@@ -9,7 +9,7 @@
  */
 void execute_command(char *command, char *shellname)
 {
-	char *token_list[20], *path;
+	char *token_list[20], *path, **env = **environ, *env_token;
 	pid_t pid, wait_child;
 	int executable, i;
 
@@ -24,11 +24,32 @@ void execute_command(char *command, char *shellname)
 
 		if (token_list[0] != NULL)
 		{
+			if (_strcmp(token_list[0], "env") == 0)
+			{
+		
+				env_token = strtok(env, ":");
+
+				while (env_token)
+				{
+					
+					for (env = environ; *env != NULL; env++)
+					{
+						putstr(*env);
+					}
+
+					env_token = strtok(NULL, ":");
+				}
+				
+
+			}
+			free(command);
+
 			if (_strcmp(token_list[0], "exit") == 0)
 			{
 				free(command);
 				exit(EXIT_SUCCESS);
 			}
+
 
 			pid = fork();
 

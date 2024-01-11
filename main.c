@@ -10,13 +10,15 @@
 int main(int argc, char *argv[])
 {
 	char *buffer;
+	char *prompt = "$";
+
 
 	/*unused parameter*/
 	(void)argc;
 
 	while (1)
 	{
-		putstr("Cash $ ");
+		putstr(prompt);
 		buffer = take_command();
 		execute_command(buffer, argv[0]);
 		free(buffer);
