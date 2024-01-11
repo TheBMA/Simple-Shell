@@ -1,10 +1,10 @@
 #include "main.h"
 /**
- * print_environment - prints environment variables.
+ * get_environment - prints environment variables.
  * Prototype: void print_environment(void);
  * Return: void
  */
-void get_environment()
+void get_environment(void)
 {
 	char **env = environ;
 
