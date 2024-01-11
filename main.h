@@ -9,7 +9,7 @@
 #include <string.h>
 #include <dirent.h>
 #include <signal.h>
-#include <sys/wait.h>
+/* #include <sys/wait.h> */
 #include <sys/stat.h>
 #include <fcntl.h>
 
@@ -21,6 +21,7 @@ void putstr(char *str);
 char *take_command(void);
 void execute_command(char *command, char *shellname);
 char *get_path(char *command);
+void get_environment();
 
 /*string functions to be used*/
 int _strlen(char *str);
