@@ -5,20 +5,12 @@
  */
 void get_environment(void)
 {
-	char **env = environ, *env_token;
+	char **env = environ;
 
-	env_token = strtok(*env, ":");
-	
-	while (*env != NULL)
+	for (; *env != NULL ; env++)
 	{
-		while (env_token != NULL)
-		{
-			putstr(*env);
-			putstr("\n");
-			env_token = strtok(NULL, ":");
-		}
-
-		env++;
+		putstr(*env);
+		putstr("\n");
 	}
 
 }

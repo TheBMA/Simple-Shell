@@ -44,7 +44,7 @@ void execute_command_in_child(char *token_list[], char *shellname)
 	if (path == NULL)
 	{
 		perror(shellname);
-		free(token_list[0]);
+		/*free(token_list[0]);*/
 		exit(EXIT_FAILURE);
 	}
 
