@@ -14,9 +14,6 @@ int main(int argc, char *argv[])
 	/*unused parameter*/
 	(void)argc;
 
-
-	
-	
 	while (1)
 	{
 		/*prompt for interactive mode only*/
