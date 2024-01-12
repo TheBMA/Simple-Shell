@@ -1,53 +1,14 @@
 #include "main.h"
 
 /**
- * execute_command - executes a command.
- * Prototype: void execute_command(char *command, char *shellname);
- * @command: a string of characters (command + arguments)
- * @shellname: the name chosen at compilation.
- * Return: void
- */
-void execute_command(char *command, char *shellname)
-{
-	char *token_list[20];
-
-	if (command == NULL)
-	{
-		perror("Command is NULL");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		token_list[0] = strtok(command, " \n");
-
-		if (token_list[0] != NULL)
-		{
-			if (_strcmp(token_list[0], "env") == 0)
-			{
-				get_environment(void);
-			}
-			free(command);
-
-			if (_strcmp(token_list[0], "exit") == 0)
-			{
-				free(command);
-				exit(EXIT_SUCCESS);
-			}
-
-			/* Create a separate function for command execution */
-			execute_command_helper(token_list, shellname);
-		}
-	}
-}
-/**
- * create_child_process - Creates a new child process using fork().
+ * create_child_process - Creates a new child process using fork.
  *
- * Return: Process ID of the child in the parent,
+ * Return: The process ID of the child in the parent,
  * 0 in the child, or -1 on failure.
  */
 pid_t create_child_process(void)
 {
-	pid_t pid = fork();
+pid_t pid = fork();
 
 	if (pid == -1)
 	{
@@ -57,12 +18,14 @@ pid_t create_child_process(void)
 
 	return (pid);
 }
+
 /**
- * execute_command_in_child - Executes a command in a child process.
+ * execute_command_in_child - Executes a command in the child process.
  *
- * @token_list: An array of command tokens
- * @shellname: The name of the shell cmd
- * Return: Exit status of the child process.
+ * @token_list: Array of command tokens.
+ * @shellname: Name of the shell program.
+ *
+ * Return: void.
  */
 void execute_command_in_child(char *token_list[], char *shellname)
 {
@@ -97,43 +60,72 @@ void execute_command_in_child(char *token_list[], char *shellname)
 	free(token_list[0]);
 	exit(EXIT_SUCCESS);
 }
-/**
- * wait_for_child -  Waits for the termination of a child process.
- *
- * @pid: Process ID of the child process.
- * (Unused attribute is optional.)
- * Return: On success, returns the process ID of the terminated child.
- * On failure, returns -1.
- */
-void wait_for_child(pid_t pid __attribute__((unused)))
-{
-	int wait_child = wait(NULL);
 
+/**
+ * execute_command_parent - Handles the parent process after forking.
+ *
+ * @command: A string of characters (command + arguments).
+ * @wait_child: Status of the child process.
+ *
+ * Return: void.
+ */
+void execute_command_parent(char *command, int wait_child)
+{
 	if (wait_child == -1)
 	{
+		free(command);
 		perror("wait failed");
 		exit(EXIT_FAILURE);
 	}
 }
+
 /**
- * execute_command_helper -  Executes a command in a child process
- * and waits for its completion.
- * @token_list:  Array of command tokens.
- * @shellname:  - Name of the shell program.
+ * execute_command - Executes a command.
+ * @command: A string of characters (command + arguments).
+ * @shellname: The name chosen at compilation.
  *
  * Return: void.
-*/
-void execute_command_helper(char *token_list[], char *shellname)
+ */
+void execute_command(char *command, char *shellname)
 {
-	pid_t pid = create_child_process();
+	char *token_list[20];
+	pid_t pid, wait_child;
 
-	if (pid == 0)
+	if (command == NULL)
 	{
-		execute_command_in_child(token_list, shellname);
+		perror("Command is NULL");
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
-		/*Code in the parent process*/
-		wait_for_child(pid);
+		token_list[0] = strtok(command, " \n");
+
+		if (token_list[0] != NULL)
+		{
+			if (_strcmp(token_list[0], "exit") == 0)
+			{
+				free(command);
+				exit(EXIT_SUCCESS)
+			}
+			if (_strcmp(token_list[0], "env") == 0)
+			{
+				get_environment();
+			}
+
+			pid = create_child_process();
+
+			/* In the child process, fork returns 0 */
+			if (pid == 0)
+			{
+				execute_command_in_child(token_list, shellname);
+			}
+			/* In the parent process, fork returns the pid */
+			else
+			{
+				wait_child = wait(NULL);
+				execute_command_parent(command, wait_child);
+			}
+		}
 	}
 }
+
