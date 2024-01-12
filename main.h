@@ -16,14 +16,12 @@
 /*environ is defined externally, used to access the environment variables*/
 extern char **environ;
 
-/*more function prototypes coming soon..*/
 void putstr(char *str);
 char *take_command(void);
 void execute_command(char *command, char *shellname);
 pid_t create_child_process(void);
 void execute_command_in_child(char *token_list[], char *shellname);
-void wait_for_child(pid_t pid);
-void execute_command_helper(char *token_list[], char *shellname);
+void wait_for_child(char *command);
 char *get_path(char *command);
 void get_environment(void);
 

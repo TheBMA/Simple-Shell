@@ -62,15 +62,16 @@ void execute_command_in_child(char *token_list[], char *shellname)
 }
 
 /**
- * execute_command_parent - Handles the parent process after forking.
+ * wait_for_child - Handles the parent process after forking.
  *
  * @command: A string of characters (command + arguments).
- * @wait_child: Status of the child process.
  *
  * Return: void.
  */
-void execute_command_parent(char *command, int wait_child)
+void wait_for_child(char *command)
 {
+	pid_t wait_child = wait(NULL);
+
 	if (wait_child == -1)
 	{
 		free(command);
@@ -89,7 +90,7 @@ void execute_command_parent(char *command, int wait_child)
 void execute_command(char *command, char *shellname)
 {
 	char *token_list[20];
-	pid_t pid, wait_child;
+	pid_t pid;
 
 	if (command == NULL)
 	{
@@ -122,10 +123,8 @@ void execute_command(char *command, char *shellname)
 			/* In the parent process, fork returns the pid */
 			else
 			{
-				wait_child = wait(NULL);
-				execute_command_parent(command, wait_child);
+				wait_for_child(command);
 			}
 		}
 	}
 }
-
