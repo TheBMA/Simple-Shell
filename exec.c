@@ -105,7 +105,7 @@ void execute_command(char *command, char *shellname)
 			if (_strcmp(token_list[0], "exit") == 0)
 			{
 				free(command);
-				exit(EXIT_SUCCESS)
+				exit(EXIT_SUCCESS);
 			}
 			if (_strcmp(token_list[0], "env") == 0)
 			{
