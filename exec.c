@@ -43,7 +43,11 @@ void execute_command_in_child(char *token_list[], char *shellname)
 	/* Handle the case when path is NULL (executable not found) */
 	if (path == NULL)
 	{
-		perror(shellname);
+		putstr(token_list[0]);
+		putstr(": 1: ");
+		putstr(token_list[0]);
+		putstr(": not found\n");
+
 		/*free(token_list[0]);*/
 		exit(EXIT_FAILURE);
 	}
@@ -52,7 +56,11 @@ void execute_command_in_child(char *token_list[], char *shellname)
 
 	if (executable == -1)
 	{
-		perror(shellname);
+		putstr(shellname);
+		putstr(": ");
+		putstr(token_list[0]);
+		putstr(": ");
+		perror("");
 		free(token_list[0]);
 		exit(EXIT_FAILURE);
 	}
@@ -119,6 +127,7 @@ void execute_command(char *command, char *shellname)
 			if (pid == 0)
 			{
 				execute_command_in_child(token_list, shellname);
+				perror(shellname);
 			}
 			/* In the parent process, fork returns the pid */
 			else
