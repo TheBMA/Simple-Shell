@@ -11,13 +11,18 @@ int main(int argc, char *argv[])
 {
 	char *buffer;
 
-
 	/*unused parameter*/
 	(void)argc;
 
+
+	
+	
 	while (1)
 	{
-		putstr("$");
+		/*prompt for interactive mode only*/
+		if (isatty(STDIN_FILENO))
+			putstr("Cash$ ");
+
 		buffer = take_command();
 		execute_command(buffer, argv[0]);
 		free(buffer);
