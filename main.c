@@ -14,18 +14,27 @@ int main(int argc, char *argv[])
 	/*unused parameter*/
 	(void)argc;
 
-	while (1)
+	/*for interactive mode*/
+	if (isatty(STDIN_FILENO))
 	{
-		/*prompt for interactive mode only*/
-		if (isatty(STDIN_FILENO))
+		while (1)
+		{
 			putstr("Cash$ ");
-
+			fflush(stdout);
+			buffer = take_command();
+			execute_command(buffer, argv[0]);
+			free(buffer);
+		}
+	}
+	/*for non-interactive mode*/
+	else
+	{
 		buffer = take_command();
 		execute_command(buffer, argv[0]);
 		free(buffer);
 	}
-
-	return (0);
+	
+	exit(EXIT_SUCCESS);
 }
 
 /**
@@ -61,7 +70,7 @@ char *take_command(void)
 
 	if (read == -1)
 	{
-		/*perror("Can't read command");*/
+		perror("Can't read command");
 		exit(EXIT_FAILURE);
 	}
 
